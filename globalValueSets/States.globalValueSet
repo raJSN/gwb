@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>ARX</fullName>
+        <default>false</default>
+        <label>ARX</label>
+    </customValue>
+    <customValue>
+        <fullName>CDI</fullName>
+        <default>false</default>
+        <label>CDI</label>
+    </customValue>
+    <customValue>
+        <fullName>EFD</fullName>
+        <default>false</default>
+        <label>EFD</label>
+    </customValue>
+    <customValue>
+        <fullName>GHJ</fullName>
+        <default>false</default>
+        <label>GHJ</label>
+    </customValue>
+    <customValue>
+        <fullName>TJK</fullName>
+        <default>false</default>
+        <label>TJK</label>
+    </customValue>
+    <masterLabel>States</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

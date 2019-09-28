@@ -1,0 +1,90 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:appHostable" controller="LTX_ApplicationForm_CC">
+	<!-- Define Attributes - Start -->
+    <aura:attribute name="settingsRec" type="List"/>
+    <aura:attribute name="templateId" type="String" default="Loan_Template" description="This is template Developer Name"/>
+    <!-- private attributes -->
+    <aura:attribute name="cs" type="String"/> <!-- Current step -->
+    <aura:attribute name="pt" type="String"/> <!-- Progress Indicator Type -->
+    <aura:attribute name="stepList" type="list"/>
+    <aura:attribute name="payloadRecs" type="list"/>
+    <aura:attribute name="result" type="Object"/>
+    <aura:attribute name="index" type="Integer"/>
+    <aura:attribute name="showSubmit" type="boolean" default="false"/>
+    <aura:attribute name="isSubmitSuccessful" type="boolean" default="false"/>
+    <aura:attribute name="navigationMap" type="Object"/>
+    <aura:attribute name="backImage" type="String" default="/resource/1552556840000/ApplicationSuccess"/>
+    <!-- Define Attributes - End -->
+    
+    <!-- Define aura handlers - Start -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.stepList}" action="{!c.createSections}"/>
+    <aura:handler name="change" value="{!v.result}" action="{!c.createSections}"/>
+    <!-- Define aura handlers - End -->
+    
+    <aura:handler event="c:LTX_ApplicationStatus" action="{!c.receiveAppStatus}"/>
+    <aura:handler name="appLoad" event="c:LTX_ApplicationLoad" action="{!c.receiveLoad}"/>
+    
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    
+    <ltng:require styles="/resource/ApplicationSuccess"/>
+    
+    <aura:if isTrue="{!v.isSubmitSuccessful==false}">
+        <!-- Encapsulate in ltng card -->
+        <section class="slds-card">
+            <!-- Main Markup -->
+            <div class="slds-border_bottom slds-box--x-small slds-p-bottom--x-small slds-text-align--center slds-text-heading--large"
+                 style="height: 80px;padding-top: 20px;">
+                Complete the Application Below
+            </div>
+            <div class="slds-box--small">
+                <lightning:progressIndicator type="{!v.pt}" currentStep="{!v.cs}" variant="shaded">
+                    <aura:iteration items="{!v.stepList}" var="step">
+                        <lightning:progressStep label="{!step}" value="{!step}"/>      
+                    </aura:iteration>
+                </lightning:progressIndicator>
+            </div>
+            
+            <!-- Dynamically create Divs -->
+            <aura:iteration items="{!v.stepList}" var="stepDiv">
+                <div id="{!stepDiv}" aura:id="dm" class="slds-box--small slds-hide">
+                    <!-- Record form will be created dynamically -->
+                </div>
+            </aura:iteration>
+        </section>
+    </aura:if>
+    
+    <!-- Submit successful section -->
+    <aura:if isTrue="{!v.isSubmitSuccessful}">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="welcome-mat-106-label" aria-describedby="welcome-mat-106-content" aria-modal="true">
+            <div class="slds-modal__container" style="height: 80%;">
+                <header class="slds-modal__header slds-modal__header_empty"/>
+                <div class="slds-modal__content" id="welcome-mat-106-content" style="overflow: -webkit-paged-x;">
+                    <div class="slds-welcome-mat slds-welcome-mat_splash">
+                        <div class="slds-welcome-mat__content slds-grid">
+                            <div class="slds-welcome-mat__info slds-size_1-of-1" 
+                                 style="{!'background-size:cover;background-position: center;background-image:url('+v.backImage+')'}">
+                                <div class="slds-welcome-mat__info-content">
+                                    <h2 class="slds-welcome-mat__info-title" id="welcome-mat-106-label">
+                                        Loan Application !
+                                    </h2>
+                                    <div class="slds-welcome-mat__info-description slds-text-longform">
+                                        <p>
+                                            You loan application has been successfully completed.
+                                        </p>
+                                    </div>
+                                    <div class="slds-p-top_medium slds-welcome-mat__info-actions">
+                                        <lightning:button variant="brand" label="New Application" 
+                                                          onclick="{!c.newApplication}"/>
+                                        <lightning:button variant="brand" label="Continue" 
+                                                          onclick="{!c.navigateToApplication}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,5 @@
+<aura:event type="APPLICATION" 
+            description="This event will be used to send dynamic component creation status">
+    <!-- COMPLETED , FAILED , INPROGRESS , STARTED, SAVEALL-->
+    <aura:attribute name="status" type="String" default="STARTED"/>
+</aura:event>

@@ -1,0 +1,20 @@
+.THIS .sectionContainer{
+    background: rgb(245, 245, 245);
+    width: 99%;
+    border-radius: 2px;
+    padding: 6px 6px 6px 12px;
+}
+.THIS .arrow .slds-icon {
+    fill:#0C8EFF !important;
+    height: 1rem !important;
+    line-height: 1 !important;
+    width: 1rem !important;
+}
+.THIS .dropIcon{
+    float: right;
+    margin-right: -15px;
+    padding-top: 4px;
+}
+.THIS .iconClass .slds-icon-text-default{
+    fill: rgb(21, 137, 238) !important;
+}

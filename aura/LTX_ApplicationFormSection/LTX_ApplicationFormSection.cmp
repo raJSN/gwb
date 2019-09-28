@@ -1,0 +1,88 @@
+<aura:component >
+	<aura:attribute name="object" type="String"/>
+    <aura:attribute name="fields" type="list"/>
+    <aura:attribute name="fieldValues" type="Object"/>
+    <aura:attribute name="settingsRec" type="Object"/>
+    <aura:attribute name="showSpinner" type="boolean" default="true"/>
+    <aura:attribute name="isCollapsed" type="Boolean" default="true"/>
+    <aura:attribute name="isLast" type="boolean" default="false"/>
+    <aura:attribute name="ns" type="String"/>
+    
+    <aura:registerEvent name="appStatus" type="c:LTX_ApplicationStatus"/>
+    <aura:registerEvent name="appLoad" type="c:LTX_ApplicationLoad"/>
+    
+    <aura:handler event="c:LTX_ApplicationStatus" action="{!c.receiveAppStatus}"/>
+    
+    <div class="slds-card">
+        <aura:if isTrue="{!v.showSpinner}">
+            <lightning:spinner variant="brand" size="small"/>
+        </aura:if>
+        <lightning:recordEditForm aura:id="ref"
+                                  onerror="{!c.getError}"
+                                  onload="{!c.handleLoad}"
+                                  onsubmit="{!c.handleSubmit}"
+                                  onsuccess="{!c.handleSuccess}"
+                                  objectApiName="{!v.object}">
+            <!-- the messages component is for error messages -->
+            <lightning:messages />
+            <div class="slds-form slds-form_compound">
+                <div class="slds-form-element__group slds-p-top_small"> 
+                    <fieldset class="slds-form-element">
+                        <legend 
+                                class="slds-form-element__legend slds-form-element__label slds-text-heading_small sectionContainer">
+                            <div class="slds-grid">
+                                <div class="slds-col slds-size_7-of-12">
+                                    <lightning:icon 
+                                                    iconName="{!empty(v.settingsRec.Icon_Name__c)?'utility:connected_apps':v.settingsRec.Icon_Name__c}" 
+                                                    size="x-small" class="slds-m-right--xx-small iconClass"/>
+                                    <label class="slds-form-element__label slds-text-heading_small" for="input-01">
+                                        {!v.settingsRec.Section_Title__c}
+                                    </label>
+                                </div>
+                                <div class="slds-col slds-size_5-of-12">
+                                    <span class="dropIcon">
+                                        <button type="button"
+                                                class="slds-button slds-button--icon-small slds-button--icon-border-filled slds-path__trigger slds-m-horizontal--small" 
+                                                >
+                                            <div class="{!if(v.isCollapsed,'','slds-hide')}" 
+                                                 onclick="{!c.opencontent}" id="contentbodySec1_arrowup">
+                                                <lightning:icon iconName="utility:chevronup" size="small" class="arrow"/>   
+                                            </div>
+                                            <div class="{!if(v.isCollapsed,'slds-hide','')}"
+                                                 onclick="{!c.opencontent}" id="contentbodySec1_arrowdown">
+                                                <lightning:icon iconName="utility:chevrondown" size="small" class="arrow"/>   
+                                            </div>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                            </div>
+                        </legend>
+                    </fieldset>
+                    <div id="body" class="{!if(v.isCollapsed,'slds-hide','')}">
+                        <div class="slds-grid slds-wrap">
+                            <aura:iteration items="{! v.fields }" var="field">
+                                <div class="slds-col slds-size_6-of-12 slds-p-around--small">
+                                    <lightning:inputField fieldName="{!field}"/>
+                                </div>
+                            </aura:iteration>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div aura:id="buttons" class="slds-align_absolute-center">
+                <lightning:button aura:id="PREVIOUS" label="Previous" iconName="utility:back" variant="neutral"
+                                  onclick="{!c.previous}" type="submit"/>
+                <aura:if isTrue="{!not(v.isLast)}">
+                    <lightning:button aura:id="SAVEANDNEXT" label="Save &amp; Next" iconName="utility:forward" variant="brand" iconPosition="right"
+                                      onclick="{!c.next}" type="submit"/>
+                </aura:if>
+                <aura:if isTrue="{!v.isLast}">
+                    <lightning:button label="Submit" iconName="utility:save" variant="brand" iconPosition="right"
+                                      onclick="{!c.submitAll}" type="submit"/>
+                </aura:if>
+            </div>
+        </lightning:recordEditForm>
+    </div>
+</aura:component>
